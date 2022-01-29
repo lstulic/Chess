@@ -1,18 +1,10 @@
 import javafx.application.Application;
 import javafx.stage.Stage;
-import javafx.scene.Scene;
-import javafx.scene.layout.Background;
-import javafx.scene.layout.BackgroundImage;
-import javafx.scene.layout.BackgroundPosition;
-import javafx.scene.layout.BackgroundRepeat;
-import javafx.scene.layout.BackgroundSize;
-import javafx.scene.layout.BorderPane;
-import javafx.scene.layout.VBox;
-import javafx.scene.text.Font;
-import javafx.scene.text.FontWeight;
-import javafx.scene.text.FontPosture;
-import javafx.scene.control.Button;
-import javafx.scene.image.Image;
+import javafx.scene.*;
+import javafx.scene.layout.*;
+import javafx.scene.text.*;
+import javafx.scene.control.*;
+import javafx.scene.image.*;
 import javafx.event.EventHandler;
 import javafx.event.ActionEvent;
 import javafx.geometry.Pos;
@@ -35,7 +27,6 @@ public class UserInterface extends Application{
 	
 	
 	private Scene createMenu(Stage stage) {
-		BorderPane bp = new BorderPane();
 		//creating items
 		VBox menu = new VBox();
 				
@@ -71,6 +62,11 @@ public class UserInterface extends Application{
 		exit.setFont(Font.font("Verdana", FontWeight.BOLD, 20));
 		
 		//adding event listeners to buttons
+		play.setOnAction((event) -> {
+			stage.setScene(createChess(stage));
+		});
+		
+		
 		exit.setOnAction((event) -> {
 			stage.close();
 		});
@@ -83,4 +79,28 @@ public class UserInterface extends Application{
 		Scene scene = new Scene(menu, 800, 800);
 		return scene;		
 	}
+	
+	
+	private Scene createChess(Stage stage) {
+		GridPane board = new GridPane();
+		for (int i = 0; i < 8; i++) {
+			for (int j = 0; j < 8; j++) {
+				StackPane square = new StackPane();
+				String color;
+				if ((i + j) % 2 == 0) {
+					color = "white";
+				} else {
+					color = "black";
+				}
+				
+				square.setStyle("-fx-background-color: " + color + ";");
+				square.setPrefSize(100, 100);
+				board.add(square, i, j);
+			}
+		}
+		
+		Scene scene = new Scene(board);
+		return scene;
+	}
+	
 }
