@@ -7,11 +7,16 @@ import javafx.scene.control.*;
 import javafx.scene.image.*;
 import javafx.event.EventHandler;
 import javafx.event.ActionEvent;
-import javafx.geometry.Pos;
-import javafx.geometry.Insets;
+import javafx.geometry.*;
 
 public class UserInterface extends Application{
 	
+	public String W_Pawn = "file:images/white_pawn.png";
+	public String B_Pawn = "file:images/black_pawn.png";
+	
+	//declaring board and fields
+	static GridPane board;
+	static Button[][] fields;
 	
 	
 	public void start(Stage stage) {
@@ -25,9 +30,9 @@ public class UserInterface extends Application{
 		launch(UserInterface.class);
 	}
 	
-	
+	//creates main menu
 	private Scene createMenu(Stage stage) {
-		//creating items
+		//declaring items
 		VBox menu = new VBox();
 				
 		Button play = new Button("Play");
@@ -37,7 +42,7 @@ public class UserInterface extends Application{
 		
 		//adding image file and creating a background
 		BackgroundImage backgroundImage = new BackgroundImage
-				(new Image("file:design/chess.jpg"),
+				(new Image("file:images/chess.jpg"),
 				BackgroundRepeat.NO_REPEAT, 
 				BackgroundRepeat.NO_REPEAT, 
 				BackgroundPosition.DEFAULT,
@@ -66,7 +71,6 @@ public class UserInterface extends Application{
 			stage.setScene(createChess(stage));
 		});
 		
-		
 		exit.setOnAction((event) -> {
 			stage.close();
 		});
@@ -76,31 +80,62 @@ public class UserInterface extends Application{
 		
 		
 		//creating scene
-		Scene scene = new Scene(menu, 800, 800);
+		Scene scene = new Scene(menu, 960, 960);
 		return scene;		
 	}
 	
-	
+	//creates chess board
 	private Scene createChess(Stage stage) {
-		GridPane board = new GridPane();
+		board = new GridPane();
+		fields = new Button[8][8];
 		for (int i = 0; i < 8; i++) {
 			for (int j = 0; j < 8; j++) {
-				StackPane square = new StackPane();
+				fields[i][j] = new Button();
 				String color;
 				if ((i + j) % 2 == 0) {
-					color = "white";
+					color = "beige";
 				} else {
-					color = "black";
+					color = "darkslategrey";
 				}
 				
-				square.setStyle("-fx-background-color: " + color + ";");
-				square.setPrefSize(100, 100);
-				board.add(square, i, j);
+				//setUpPiece(fields[i][j]);
+				
+				fields[i][j].setStyle("-fx-background-color: " + color + ";");
+				fields[i][j].setPrefSize(120, 120);
+				board.add(fields[i][j], i, j);
 			}
 		}
 		
+		//moving pieces
+		/*fields[0][0].setGraphic(new ImageView(B_Pawn));
+		fields[0][0].setOnAction((event) -> {
+			for (int i = 0; i < 8; i++) {
+				for (int j = 0; j < 8; j++) {
+					Button button = fields[i][j];
+					button.setOnAction((event2) -> {
+						movePiece(button);
+						removePiece(fields[0][0]);
+					});
+				}
+			}
+		});*/
+		
 		Scene scene = new Scene(board);
 		return scene;
+	}
+	
+	private void setUpPiece(Button button) {
+		button.setOnAction((event) -> {
+			movePiece(button);
+		});
+	}
+	
+	private void movePiece(Button button) {
+		button.setGraphic(new ImageView(B_Pawn));
+	}
+	
+	private void removePiece(Button button) {
+		button.setGraphic(null);
 	}
 	
 }
