@@ -8,6 +8,7 @@ import javafx.scene.image.*;
 import javafx.event.EventHandler;
 import javafx.event.ActionEvent;
 import javafx.geometry.*;
+import java.util.ArrayList;
 
 public class UserInterface extends Application{
 	
@@ -17,6 +18,7 @@ public class UserInterface extends Application{
 	//declaring board and fields
 	static GridPane board;
 	static Button[][] fields;
+	static int xM, yM;
 	
 	
 	public void start(Stage stage) {
@@ -90,7 +92,7 @@ public class UserInterface extends Application{
 		fields = new Button[8][8];
 		for (int i = 0; i < 8; i++) {
 			for (int j = 0; j < 8; j++) {
-				fields[i][j] = new Button();
+				fields[j][i] = new Button();
 				String color;
 				if ((i + j) % 2 == 0) {
 					color = "beige";
@@ -98,13 +100,14 @@ public class UserInterface extends Application{
 					color = "darkslategrey";
 				}
 				
-				//setUpPiece(fields[i][j]);
 				
-				fields[i][j].setStyle("-fx-background-color: " + color + ";");
-				fields[i][j].setPrefSize(120, 120);
-				board.add(fields[i][j], i, j);
+				fields[j][i].setStyle("-fx-background-color: " + color + ";");
+				fields[j][i].setPrefSize(120, 120);
+				board.add(fields[j][i], i, j);
 			}
 		}
+		
+		setUp();
 		
 		//moving pieces
 		/*fields[0][0].setGraphic(new ImageView(B_Pawn));
@@ -124,14 +127,61 @@ public class UserInterface extends Application{
 		return scene;
 	}
 	
-	private void setUpPiece(Button button) {
-		button.setOnAction((event) -> {
-			movePiece(button);
+	private void setUp() {
+		for (int i = 0; i < 8; i++) {
+			Figure pawnW = new Pawn(new Coordinate(6,i), "white", W_Pawn);
+			setUpPiece(pawnW);
+		}
+		
+		for (int i = 0; i < 8; i++) {
+			Figure pawnB = new Pawn(new Coordinate(1,i), "black", B_Pawn);
+			setUpPiece(pawnB);
+		}
+	}
+	
+	private void setUpPiece(Figure piece) {
+		int x = piece.getCoordinates().getX();
+		int y = piece.getCoordinates().getY();
+		String color = piece.getColor();
+		String pieceImage = piece.getImage();
+		Button field = fields[x][y];
+		field.setGraphic(new ImageView(pieceImage));
+		field.setOnAction((event) -> {
+			moves(piece);
 		});
 	}
 	
-	private void movePiece(Button button) {
-		button.setGraphic(new ImageView(B_Pawn));
+	private void moves(Figure piece) {
+		int x = piece.getCoordinates().getX();
+		int y = piece.getCoordinates().getY();
+		ArrayList<Coordinate> move = piece.getMoves();
+		System.out.println(piece.getMoves());
+		for(Coordinate c: move) {
+			xM = c.getX() + x;
+			yM = c.getY() + y;
+			System.out.println(c.getX());
+			System.out.println(c.getY());
+			if (xM < 8 && xM > -1) {
+				if (yM < 8 && yM > -1) {
+					fields[xM][yM].setOnAction((event) -> {
+						movePiece(fields[xM][yM], xM, yM, piece);
+						removePiece(fields[x][y]);
+						fields[x][y].setOnAction((event2) -> {
+							moves(piece);
+						});
+					});
+				}
+			}
+		}
+	}
+	
+	private void movePiece(Button button, int x, int y, Figure piece) {
+		button.setGraphic(new ImageView(piece.getImage()));
+		piece.setCoordinates(x, y);
+		button.setOnAction((event) -> {
+			moves(piece);
+		});
+		
 	}
 	
 	private void removePiece(Button button) {
