@@ -13,12 +13,24 @@ import java.util.ArrayList;
 public class UserInterface extends Application{
 	
 	public String W_Pawn = "file:images/white_pawn.png";
+	public String W_Bishop = "file:images/white_bishop.png";
+	public String W_Rook = "file:images/white_rook.png";
+	public String W_Knight = "file:images/white_knight.png";
+	public String W_King = "file:images/white_king.png";
+	public String W_Queen = "file:images/white_queen.png";
 	public String B_Pawn = "file:images/black_pawn.png";
+	public String B_Bishop = "file:images/black_bishop.png";
+	public String B_Rook = "file:images/black_rook.png";
+	public String B_Knight = "file:images/black_knight.png";
+	public String B_King = "file:images/black_king.png";
+	public String B_Queen = "file:images/black_queen.png";
+	
 	
 	//declaring board and fields
 	static GridPane board;
 	static Button[][] fields;
 	static int xM, yM;
+	
 	
 	
 	public void start(Stage stage) {
@@ -28,9 +40,11 @@ public class UserInterface extends Application{
 		stage.show();
 	}
 	
+	
 	public static void launch() {
 		launch(UserInterface.class);
 	}
+	
 	
 	//creates main menu
 	private Scene createMenu(Stage stage) {
@@ -86,6 +100,7 @@ public class UserInterface extends Application{
 		return scene;		
 	}
 	
+	
 	//creates chess board
 	private Scene createChess(Stage stage) {
 		board = new GridPane();
@@ -109,23 +124,13 @@ public class UserInterface extends Application{
 		
 		setUp();
 		
-		//moving pieces
-		/*fields[0][0].setGraphic(new ImageView(B_Pawn));
-		fields[0][0].setOnAction((event) -> {
-			for (int i = 0; i < 8; i++) {
-				for (int j = 0; j < 8; j++) {
-					Button button = fields[i][j];
-					button.setOnAction((event2) -> {
-						movePiece(button);
-						removePiece(fields[0][0]);
-					});
-				}
-			}
-		});*/
+		
 		
 		Scene scene = new Scene(board);
 		return scene;
 	}
+	
+	
 	
 	private void setUp() {
 		for (int i = 0; i < 8; i++) {
@@ -133,11 +138,64 @@ public class UserInterface extends Application{
 			setUpPiece(pawnW);
 		}
 		
+		Figure leftBishopW = new Bishop(new Coordinate(7,2), "white", W_Bishop);
+		setUpPiece(leftBishopW);
+		
+		Figure rightBishopW = new Bishop(new Coordinate(7,5), "white", W_Bishop);
+		setUpPiece(rightBishopW);
+		
+		Figure leftRookW = new Rook(new Coordinate(7,0), "white", W_Rook);
+		setUpPiece(leftRookW);
+		
+		Figure rightRookW = new Rook(new Coordinate(7,7), "white", W_Rook);
+		setUpPiece(rightRookW);
+		
+		Figure leftKnightW = new Knight(new Coordinate(7,1), "white", W_Knight);
+		setUpPiece(leftKnightW);
+
+		Figure rightKnightW = new Knight(new Coordinate(7,6), "white", W_Knight);
+		setUpPiece(rightKnightW);
+		
+		Figure queenW = new Queen(new Coordinate(7,3), "white", W_Queen);
+		setUpPiece(queenW);
+		
+		Figure kingW = new King(new Coordinate(7,4), "white", W_King);
+		setUpPiece(kingW);
+		
+		
+		
 		for (int i = 0; i < 8; i++) {
 			Figure pawnB = new Pawn(new Coordinate(1,i), "black", B_Pawn);
 			setUpPiece(pawnB);
 		}
+		
+		Figure leftBishopB = new Bishop(new Coordinate(0,2), "white", B_Bishop);
+		setUpPiece(leftBishopB);
+		
+		Figure rightBishopB = new Bishop(new Coordinate(0,5), "white", B_Bishop);
+		setUpPiece(rightBishopB);
+		
+		Figure leftRookB = new Rook(new Coordinate(0,0), "white", B_Rook);
+		setUpPiece(leftRookB);
+		
+		Figure rightRookB = new Rook(new Coordinate(0,7), "white", B_Rook);
+		setUpPiece(rightRookB);
+		
+		Figure leftKnightB = new Knight(new Coordinate(0,1), "white", B_Knight);
+		setUpPiece(leftKnightB);
+
+		Figure rightKnightB = new Knight(new Coordinate(0,6), "white", B_Knight);
+		setUpPiece(rightKnightB);
+		
+		Figure queenB = new Queen(new Coordinate(0,3), "white", B_Queen);
+		setUpPiece(queenB);
+		
+		Figure kingB = new King(new Coordinate(0,4), "white", B_King);
+		setUpPiece(kingB);
+		
 	}
+	
+	
 	
 	private void setUpPiece(Figure piece) {
 		int x = piece.getCoordinates().getX();
@@ -150,6 +208,8 @@ public class UserInterface extends Application{
 			moves(piece);
 		});
 	}
+	
+	
 	
 	private void moves(Figure piece) {
 		int x = piece.getCoordinates().getX();
@@ -166,14 +226,20 @@ public class UserInterface extends Application{
 					fields[xM][yM].setOnAction((event) -> {
 						movePiece(fields[xM][yM], xM, yM, piece);
 						removePiece(fields[x][y]);
-						fields[x][y].setOnAction((event2) -> {
-							moves(piece);
-						});
 					});
 				}
 			}
 		}
 	}
+	
+	//the moment i press something i need to clear every other event listener
+	//and make event listener for the field that was clicked
+	//to get all other events back
+	
+	
+	
+	//add ids to every piece and add it to hashmap
+	
 	
 	private void movePiece(Button button, int x, int y, Figure piece) {
 		button.setGraphic(new ImageView(piece.getImage()));
@@ -183,6 +249,8 @@ public class UserInterface extends Application{
 		});
 		
 	}
+	
+	
 	
 	private void removePiece(Button button) {
 		button.setGraphic(null);
