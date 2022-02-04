@@ -154,7 +154,7 @@ public class UserInterface extends Application{
 		Figure rightRookW = new Rook(new Coordinate(7,7), "white", W_Rook, "rightRookW");
 		pieces.put("rightRookW", rightRookW);
 		
-		Figure leftKnightW = new Knight(new Coordinate(7,1), "white", W_Knight, "rightKnightW");
+		Figure leftKnightW = new Knight(new Coordinate(7,1), "white", W_Knight, "leftKnightW");
 		pieces.put("leftKnightW", leftKnightW);
 
 		Figure rightKnightW = new Knight(new Coordinate(7,6), "white", W_Knight, "rightKnightW");
@@ -185,7 +185,7 @@ public class UserInterface extends Application{
 		Figure rightRookB = new Rook(new Coordinate(0,7), "white", B_Rook, "rightRookB");
 		pieces.put("rightRookB", rightRookB);
 		
-		Figure leftKnightB = new Knight(new Coordinate(0,1), "white", B_Knight, "rightKnightB");
+		Figure leftKnightB = new Knight(new Coordinate(0,1), "white", B_Knight, "leftKnightB");
 		pieces.put("leftKnightB", leftKnightB);
 
 		Figure rightKnightB = new Knight(new Coordinate(0,6), "white", B_Knight, "rightKnightB");
