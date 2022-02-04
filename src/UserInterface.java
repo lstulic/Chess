@@ -9,6 +9,8 @@ import javafx.event.EventHandler;
 import javafx.event.ActionEvent;
 import javafx.geometry.*;
 import java.util.ArrayList;
+import java.util.Map;
+import java.util.HashMap;
 
 public class UserInterface extends Application{
 	
@@ -30,7 +32,7 @@ public class UserInterface extends Application{
 	static GridPane board;
 	static Button[][] fields;
 	static int xM, yM;
-	
+	HashMap<String, Figure> pieces = new HashMap<>();
 	
 	
 	public void start(Stage stage) {
@@ -134,64 +136,69 @@ public class UserInterface extends Application{
 	
 	private void setUp() {
 		for (int i = 0; i < 8; i++) {
-			Figure pawnW = new Pawn(new Coordinate(6,i), "white", W_Pawn);
-			setUpPiece(pawnW);
+			Figure pawnW = new Pawn(new Coordinate(6,i), "white", W_Pawn, "pawnW" + (i+1));
+			pieces.put("pawnW" + (i+1),pawnW);
+			
 		}
 		
-		Figure leftBishopW = new Bishop(new Coordinate(7,2), "white", W_Bishop);
-		setUpPiece(leftBishopW);
+		Figure leftBishopW = new Bishop(new Coordinate(7,2), "white", W_Bishop, "leftBishopW");
+		pieces.put("leftBishopW", leftBishopW);
 		
-		Figure rightBishopW = new Bishop(new Coordinate(7,5), "white", W_Bishop);
-		setUpPiece(rightBishopW);
+		Figure rightBishopW = new Bishop(new Coordinate(7,5), "white", W_Bishop, "rightBishopW");
+		pieces.put("rightBishopW", rightBishopW);
 		
-		Figure leftRookW = new Rook(new Coordinate(7,0), "white", W_Rook);
-		setUpPiece(leftRookW);
+		Figure leftRookW = new Rook(new Coordinate(7,0), "white", W_Rook, "leftRookW");
+		pieces.put("leftRookW", leftRookW);
 		
-		Figure rightRookW = new Rook(new Coordinate(7,7), "white", W_Rook);
-		setUpPiece(rightRookW);
+		Figure rightRookW = new Rook(new Coordinate(7,7), "white", W_Rook, "rightRookW");
+		pieces.put("rightRookW", rightRookW);
 		
-		Figure leftKnightW = new Knight(new Coordinate(7,1), "white", W_Knight);
-		setUpPiece(leftKnightW);
+		Figure leftKnightW = new Knight(new Coordinate(7,1), "white", W_Knight, "rightKnightW");
+		pieces.put("leftKnightW", leftKnightW);
 
-		Figure rightKnightW = new Knight(new Coordinate(7,6), "white", W_Knight);
-		setUpPiece(rightKnightW);
+		Figure rightKnightW = new Knight(new Coordinate(7,6), "white", W_Knight, "rightKnightW");
+		pieces.put("rightKnightW", rightKnightW);
 		
-		Figure queenW = new Queen(new Coordinate(7,3), "white", W_Queen);
-		setUpPiece(queenW);
+		Figure queenW = new Queen(new Coordinate(7,3), "white", W_Queen, "queenW");
+		pieces.put("queenW", queenW);
 		
-		Figure kingW = new King(new Coordinate(7,4), "white", W_King);
-		setUpPiece(kingW);
+		Figure kingW = new King(new Coordinate(7,4), "white", W_King, "kingW");
+		pieces.put("kingW", kingW);
 		
 		
 		
 		for (int i = 0; i < 8; i++) {
-			Figure pawnB = new Pawn(new Coordinate(1,i), "black", B_Pawn);
-			setUpPiece(pawnB);
+			Figure pawnB = new Pawn(new Coordinate(1,i), "black", B_Pawn, "pawnB" + (i+1));
+			pieces.put("pawnB" + (i+1), pawnB);
 		}
 		
-		Figure leftBishopB = new Bishop(new Coordinate(0,2), "white", B_Bishop);
-		setUpPiece(leftBishopB);
+		Figure leftBishopB = new Bishop(new Coordinate(0,2), "white", B_Bishop, "leftBishopB");
+		pieces.put("leftBishopB", leftBishopB);
 		
-		Figure rightBishopB = new Bishop(new Coordinate(0,5), "white", B_Bishop);
-		setUpPiece(rightBishopB);
+		Figure rightBishopB = new Bishop(new Coordinate(0,5), "white", B_Bishop, "rightBishopB");
+		pieces.put("rightBishopB", rightBishopB);
 		
-		Figure leftRookB = new Rook(new Coordinate(0,0), "white", B_Rook);
-		setUpPiece(leftRookB);
+		Figure leftRookB = new Rook(new Coordinate(0,0), "white", B_Rook, "leftRookB");
+		pieces.put("leftRookB", leftRookB);
 		
-		Figure rightRookB = new Rook(new Coordinate(0,7), "white", B_Rook);
-		setUpPiece(rightRookB);
+		Figure rightRookB = new Rook(new Coordinate(0,7), "white", B_Rook, "rightRookB");
+		pieces.put("rightRookB", rightRookB);
 		
-		Figure leftKnightB = new Knight(new Coordinate(0,1), "white", B_Knight);
-		setUpPiece(leftKnightB);
+		Figure leftKnightB = new Knight(new Coordinate(0,1), "white", B_Knight, "rightKnightB");
+		pieces.put("leftKnightB", leftKnightB);
 
-		Figure rightKnightB = new Knight(new Coordinate(0,6), "white", B_Knight);
-		setUpPiece(rightKnightB);
+		Figure rightKnightB = new Knight(new Coordinate(0,6), "white", B_Knight, "rightKnightB");
+		pieces.put("rightKnightB", rightKnightB);
 		
-		Figure queenB = new Queen(new Coordinate(0,3), "white", B_Queen);
-		setUpPiece(queenB);
+		Figure queenB = new Queen(new Coordinate(0,3), "white", B_Queen, "queenB");
+		pieces.put("queenB", queenB);
 		
-		Figure kingB = new King(new Coordinate(0,4), "white", B_King);
-		setUpPiece(kingB);
+		Figure kingB = new King(new Coordinate(0,4), "white", B_King, "kingB");
+		pieces.put("kingB", kingB);
+		
+		for (Figure figure: pieces.values()) {
+			setUpPiece(figure);
+		}
 		
 	}
 	
@@ -215,12 +222,9 @@ public class UserInterface extends Application{
 		int x = piece.getCoordinates().getX();
 		int y = piece.getCoordinates().getY();
 		ArrayList<Coordinate> move = piece.getMoves();
-		System.out.println(piece.getMoves());
 		for(Coordinate c: move) {
 			xM = c.getX() + x;
 			yM = c.getY() + y;
-			System.out.println(c.getX());
-			System.out.println(c.getY());
 			if (xM < 8 && xM > -1) {
 				if (yM < 8 && yM > -1) {
 					fields[xM][yM].setOnAction((event) -> {
