@@ -1,8 +1,8 @@
 
 public class Rook extends Figure{
 
-	public Rook(Coordinate cords, String color, String image) {
-		super(cords, color, image);
+	public Rook(Coordinate cords, String color, String image, String id) {
+		super(cords, color, image, id);
 		addMoves();
 	}
 	

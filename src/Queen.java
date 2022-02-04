@@ -1,8 +1,8 @@
 
 public class Queen extends Figure{
 
-	public Queen(Coordinate cords, String color, String image) {
-		super(cords, color, image);
+	public Queen(Coordinate cords, String color, String image, String id) {
+		super(cords, color, image, id);
 		addMoves();
 	}
 	

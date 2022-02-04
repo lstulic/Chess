@@ -6,12 +6,14 @@ public abstract class Figure {
 	private String color;
 	private ArrayList<Coordinate> moves;
 	private String image;
+	private String id;
 	
-	public Figure(Coordinate cords, String color, String image) {
+	public Figure(Coordinate cords, String color, String image, String id) {
 		this.cords = new Coordinate(cords.getX(), cords.getY());
 		this.color = color;
 		this.moves = new ArrayList<>();
 		this.image = image;
+		this.id = id;
 	}
 	
 	public String getColor() {

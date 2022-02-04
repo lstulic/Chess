@@ -1,8 +1,8 @@
 
 public class Knight extends Figure{
 
-	public Knight(Coordinate cords, String color, String image) {
-		super(cords, color, image);
+	public Knight(Coordinate cords, String color, String image, String id) {
+		super(cords, color, image, id);
 		addMoves();
 	}
 	

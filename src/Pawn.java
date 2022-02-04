@@ -1,8 +1,8 @@
 
 public class Pawn extends Figure{
 
-	public Pawn(Coordinate cords, String color, String image) {
-		super(cords, color, image);
+	public Pawn(Coordinate cords, String color, String image, String id) {
+		super(cords, color, image, id);
 		addMoves();
 	}
 	

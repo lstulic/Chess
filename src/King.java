@@ -1,8 +1,8 @@
 
 public class King extends Figure{
 
-	public King(Coordinate cords, String color, String image) {
-		super(cords, color, image);
+	public King(Coordinate cords, String color, String image, String id) {
+		super(cords, color, image, id);
 		addMoves();
 	}
 	
