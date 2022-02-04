@@ -33,6 +33,7 @@ public class UserInterface extends Application{
 	static GridPane board;
 	static Button[][] fields;
 	HashMap<String, Figure> pieces = new HashMap<>();
+	public boolean firstMove = true;
 	
 	
 	public void start(Stage stage) {
@@ -221,80 +222,198 @@ public class UserInterface extends Application{
 	
 	
 	private void moves(Figure piece, String style) {
-		int x = piece.getCoordinates().getX();
-		int y = piece.getCoordinates().getY();
-		ArrayList<Coordinate> move = piece.getMoves();
-		clearField();
 		
-		fields[x][y].setOnAction((event) -> {
+			int x = piece.getCoordinates().getX();
+			int y = piece.getCoordinates().getY();
+			ArrayList<Coordinate> move = piece.getMoves();
 			clearField();
-			fields[x][y].setStyle(style);
-			for (Figure figure: pieces.values()) {
-				setUpPiece(figure);
-			}
-		});
 		
-		boolean knight = piece.getId().contains("Knight");
-		boolean sameColor = false;
+			fields[x][y].setOnAction((event) -> {
+				clearField();
+				fields[x][y].setStyle(style);
+				for (Figure figure: pieces.values()) {
+					setUpPiece(figure);
+				}
+			});
+		
+			boolean knight = piece.getId().contains("Knight");
+			boolean sameColor = false;
+			boolean hasPiece = false;
 		
 		
-		for(Coordinate c: move) {
-			int xx = c.getX() + x;
-			int yy = c.getY() + y;
-			int cgetX = c.getX();
-			int cgetY = c.getY();
+			for(Coordinate c: move) {
+				int xx = c.getX() + x;
+				int yy = c.getY() + y;
+				int cgetX = c.getX();
+				int cgetY = c.getY();
 			
 			
-			if (xx < 8 && xx > -1) {
-				if (yy < 8 && yy > -1) {
-					if (!knight) {
-						if (sameColor) {//collision
-							if ((cgetX == 0 && cgetY == 1) || 
-								(cgetX == 1 && cgetY == 0) || 
-								(cgetX == 0 && cgetY == -1) ||
-								(cgetX == -1 && cgetY == 0) ||
-								(cgetX == 1 && cgetY == 1) ||
-								(cgetX == -1 && cgetY == -1) ||
-								(cgetX == -1 && cgetY == 1) ||
-								(cgetX == 1 && cgetY == -1)) {
-								sameColor = false;
-							}
-						}
-					} else {
-						sameColor = false;
-					}
-					if(!sameColor) {
-						for (Figure figure: pieces.values()) {
-							if (figure.getCoordinates().getX() == xx) {
-								if (figure.getCoordinates().getY() == yy) {
-									if (figure.getColor().equals(piece.getColor())) {
-										sameColor = true;
-									}
-									if (figure.getId().contains("king")) {
-										sameColor = true;
-									}
+				if (xx < 8 && xx > -1) {
+					if (yy < 8 && yy > -1) {
+						if (!knight) {
+							if (sameColor) {//collision
+								if ((cgetX == 0 && cgetY == 1) || 
+									(cgetX == 1 && cgetY == 0) || 
+									(cgetX == 0 && cgetY == -1) ||
+									(cgetX == -1 && cgetY == 0) ||
+									(cgetX == 1 && cgetY == 1) ||
+									(cgetX == -1 && cgetY == -1) ||
+									(cgetX == -1 && cgetY == 1) ||
+									(cgetX == 1 && cgetY == -1)) {
+									sameColor = false;
 								}
 							}
-							
+						} else {
+							sameColor = false;
+						}
+						if(!sameColor) {
+							for (Figure figure: pieces.values()) {
+								if (figure.getCoordinates().getX() == xx) {
+									if (figure.getCoordinates().getY() == yy) {
+										if (figure.getColor().equals(piece.getColor())) {
+											sameColor = true;
+										} else {
+											hasPiece = true;
+										}
+										if (figure.getId().contains("king")) {
+											sameColor = true;
+										}
+									}
+								}
+								
+							}
+						}
+						
+						if (!sameColor) {
+							if (piece.getId().contains("pawn")) {
+								if (!hasPiece) {
+									setMove(fields[xx][yy], x, y, xx, yy, piece, style);
+								}
+							} else {
+								setMove(fields[xx][yy], x, y, xx, yy, piece, style);
+							}
 						}
 					}
-					
-					if (!sameColor) {
-						setMove(fields[xx][yy], x, y, xx, yy, piece, style);
+				}
+			}
+			
+			if (piece.getId().contains("pawn")) {
+				pawnMoves(piece, style);
+			}
+		
+		
+		
+		
+	}
+	
+	
+	
+	private void pawnMoves(Figure piece, String style) {
+		int x = piece.getCoordinates().getX();
+		int y = piece.getCoordinates().getY();
+		
+		boolean sameColor = false;
+		if (piece.getId().contains("pawnW")) {
+			for (Figure figure: pieces.values()) {
+				if (figure.getCoordinates().getX() == x-1) {
+					if (figure.getCoordinates().getY() == y-1) {
+						if (!figure.getColor().equals(piece.getColor())) {
+							if (!figure.getId().contains("king")) {
+								setMove(fields[x-1][y-1], x, y, x-1, y-1, piece, style);
+							}
+						}
+					}
+				}
+				if (figure.getCoordinates().getX() == x-1) {
+					if (figure.getCoordinates().getY() == y+1) {
+						if (!figure.getColor().equals(piece.getColor())) {
+							if (!figure.getId().contains("king")) {
+								setMove(fields[x-1][y+1], x, y, x-1, y+1, piece, style);
+							}
+						}
+					}
+				}
+			}
+		} else {
+			for (Figure figure: pieces.values()) {
+				if (figure.getCoordinates().getX() == x+1) {
+					if (figure.getCoordinates().getY() == y+1) {
+						if (!figure.getColor().equals(piece.getColor())) {
+							if (!figure.getId().contains("king")) {
+								setMove(fields[x+1][y+1], x, y, x+1, y+1, piece, style);
+							}
+						}
+					}
+				}
+				if (figure.getCoordinates().getX() == x+1) {
+					if (figure.getCoordinates().getY() == y-1) {
+						if (!figure.getColor().equals(piece.getColor())) {
+							if (!figure.getId().contains("king")) {
+								setMove(fields[x+1][y-1], x, y, x+1, y-1, piece, style);
+							}
+						}
 					}
 				}
 			}
 		}
+		
 	}
 	
 	
 	
 	public void setMove(Button button, int x, int y, int xx, int yy, Figure piece, String style) {
-		fields[xx][yy].setOnAction((event) -> {
-			movePiece(fields[xx][yy], xx, yy, piece);
-			removePiece(fields[x][y]);
-			fields[x][y].setStyle(style);
-		});
+		if (piece.getId().contains("pawnW")) {
+			Pawn pieceP = (Pawn) piece;
+			if (!pieceP.Moved()) {
+				fields[xx-1][yy].setOnAction((event) -> {
+					movePiece(fields[xx-1][yy], xx-1, yy, piece);
+					removePiece(fields[x][y]);
+					fields[x][y].setStyle(style);
+					pieceP.Move();
+				});
+				fields[xx][yy].setOnAction((event) -> {
+					movePiece(fields[xx][yy], xx, yy, piece);
+					removePiece(fields[x][y]);
+					fields[x][y].setStyle(style);
+					pieceP.Move();
+				});
+			} else {
+				fields[xx][yy].setOnAction((event) -> {
+					movePiece(fields[xx][yy], xx, yy, piece);
+					removePiece(fields[x][y]);
+					fields[x][y].setStyle(style);
+					pieceP.Move();
+				});
+			}
+		} else if(piece.getId().contains("pawnB")) {
+			Pawn pieceP = (Pawn) piece;
+			if (!pieceP.Moved()) {
+				fields[xx+1][yy].setOnAction((event) -> {
+					movePiece(fields[xx+1][yy], xx+1, yy, piece);
+					removePiece(fields[x][y]);
+					fields[x][y].setStyle(style);
+					pieceP.Move();
+				});
+				fields[xx][yy].setOnAction((event) -> {
+					movePiece(fields[xx][yy], xx, yy, piece);
+					removePiece(fields[x][y]);
+					fields[x][y].setStyle(style);
+					pieceP.Move();
+				});
+			} else {
+				fields[xx][yy].setOnAction((event) -> {
+					movePiece(fields[xx][yy], xx, yy, piece);
+					removePiece(fields[x][y]);
+					fields[x][y].setStyle(style);
+				});
+			}
+		}else {
+			fields[xx][yy].setOnAction((event) -> {
+				movePiece(fields[xx][yy], xx, yy, piece);
+				removePiece(fields[x][y]);
+				fields[x][y].setStyle(style);
+			});
+		}
 	}
 	
 	
