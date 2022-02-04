@@ -32,7 +32,6 @@ public class UserInterface extends Application{
 	//declaring board and fields
 	static GridPane board;
 	static Button[][] fields;
-	public int xM, yM;
 	HashMap<String, Figure> pieces = new HashMap<>();
 	
 	
@@ -235,20 +234,48 @@ public class UserInterface extends Application{
 			}
 		});
 		
+		boolean knight = piece.getId().contains("Knight");
+		boolean sameColor = false;
+		
+		
 		for(Coordinate c: move) {
-			boolean sameColor = false;
 			int xx = c.getX() + x;
 			int yy = c.getY() + y;
+			int cgetX = c.getX();
+			int cgetY = c.getY();
+			
+			
 			if (xx < 8 && xx > -1) {
 				if (yy < 8 && yy > -1) {
-					
-					for (Figure figure: pieces.values()) {
-						if (figure.getCoordinates().getX() == xx) {
-							if (figure.getCoordinates().getY() == yy) {
-								if (figure.getColor().equals(piece.getColor())) {
-									sameColor = true;
+					if (!knight) {
+						if (sameColor) {//collision
+							if ((cgetX == 0 && cgetY == 1) || 
+								(cgetX == 1 && cgetY == 0) || 
+								(cgetX == 0 && cgetY == -1) ||
+								(cgetX == -1 && cgetY == 0) ||
+								(cgetX == 1 && cgetY == 1) ||
+								(cgetX == -1 && cgetY == -1) ||
+								(cgetX == -1 && cgetY == 1) ||
+								(cgetX == 1 && cgetY == -1)) {
+								sameColor = false;
+							}
+						}
+					} else {
+						sameColor = false;
+					}
+					if(!sameColor) {
+						for (Figure figure: pieces.values()) {
+							if (figure.getCoordinates().getX() == xx) {
+								if (figure.getCoordinates().getY() == yy) {
+									if (figure.getColor().equals(piece.getColor())) {
+										sameColor = true;
+									}
+									if (figure.getId().contains("king")) {
+										sameColor = true;
+									}
 								}
 							}
+							
 						}
 					}
 					
@@ -260,13 +287,7 @@ public class UserInterface extends Application{
 		}
 	}
 	
-	//the moment i press something i need to clear every other event listener
-	//and make event listener for the field that was clicked
-	//to get all other events back
 	
-	
-	
-	//add ids to every piece and add it to hashmap
 	
 	public void setMove(Button button, int x, int y, int xx, int yy, Figure piece, String style) {
 		fields[xx][yy].setOnAction((event) -> {
@@ -275,6 +296,7 @@ public class UserInterface extends Application{
 			fields[x][y].setStyle(style);
 		});
 	}
+	
 	
 	
 	private void movePiece(Button button, int x, int y, Figure piece) {
