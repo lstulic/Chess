@@ -41,5 +41,9 @@ public abstract class Figure {
 		return this.image;
 	}
 	
+	public String getId() {
+		return this.id;
+	}
+	
 	public abstract void addMoves();
 }
