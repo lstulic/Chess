@@ -9,8 +9,17 @@ public class Bishop extends Figure{
 	public void addMoves() {
 		for (int i = 1; i < 8; i++) {
 			setMove(i,i);
+		}
+		
+		for (int i = 1; i < 8; i++) {
 			setMove(-i,-i);
+		}
+		
+		for (int i = 1; i < 8; i++) {
 			setMove(i,-i);
+		}
+		
+		for (int i = 1; i < 8; i++) {
 			setMove(-i, i);
 		}
 	}

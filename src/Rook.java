@@ -9,8 +9,17 @@ public class Rook extends Figure{
 	public void addMoves() {
 		for (int i = 1; i < 8; i++) {
 			setMove(0,i);
+		}
+		
+		for (int i = 1; i < 8; i++) {
 			setMove(i,0);
+		}
+		
+		for (int i = 1; i < 8; i++) {
 			setMove(0,-i);
+		}
+
+		for (int i = 1; i < 8; i++) {
 			setMove(-i,0);
 		}
 	}
