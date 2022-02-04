@@ -5,6 +5,7 @@ import javafx.scene.layout.*;
 import javafx.scene.text.*;
 import javafx.scene.control.*;
 import javafx.scene.image.*;
+import javafx.scene.paint.*;
 import javafx.event.EventHandler;
 import javafx.event.ActionEvent;
 import javafx.geometry.*;
@@ -31,7 +32,7 @@ public class UserInterface extends Application{
 	//declaring board and fields
 	static GridPane board;
 	static Button[][] fields;
-	static int xM, yM;
+	public int xM, yM;
 	HashMap<String, Figure> pieces = new HashMap<>();
 	
 	
@@ -212,25 +213,34 @@ public class UserInterface extends Application{
 		Button field = fields[x][y];
 		field.setGraphic(new ImageView(pieceImage));
 		field.setOnAction((event) -> {
-			moves(piece);
+			String style = field.getStyle();
+			field.setStyle(style + "-fx-border-color: red; -fx-border-width: 1 1 1 1;");
+			moves(piece, style);
 		});
 	}
 	
 	
 	
-	private void moves(Figure piece) {
+	private void moves(Figure piece, String style) {
 		int x = piece.getCoordinates().getX();
 		int y = piece.getCoordinates().getY();
 		ArrayList<Coordinate> move = piece.getMoves();
+		clearField();
+		
+		fields[x][y].setOnAction((event) -> {
+			clearField();
+			fields[x][y].setStyle(style);
+			for (Figure figure: pieces.values()) {
+				setUpPiece(figure);
+			}
+		});
+		
 		for(Coordinate c: move) {
-			xM = c.getX() + x;
-			yM = c.getY() + y;
-			if (xM < 8 && xM > -1) {
-				if (yM < 8 && yM > -1) {
-					fields[xM][yM].setOnAction((event) -> {
-						movePiece(fields[xM][yM], xM, yM, piece);
-						removePiece(fields[x][y]);
-					});
+			int xx = c.getX() + x;
+			int yy = c.getY() + y;
+			if (xx < 8 && xx > -1) {
+				if (yy < 8 && yy > -1) {
+					setMove(fields[xx][yy], x, y, xx, yy, piece, style);
 				}
 			}
 		}
@@ -244,20 +254,52 @@ public class UserInterface extends Application{
 	
 	//add ids to every piece and add it to hashmap
 	
+	public void setMove(Button button, int x, int y, int xx, int yy, Figure piece, String style) {
+		fields[xx][yy].setOnAction((event) -> {
+			movePiece(fields[xx][yy], xx, yy, piece);
+			removePiece(fields[x][y]);
+			fields[x][y].setStyle(style);
+		});
+	}
+	
 	
 	private void movePiece(Button button, int x, int y, Figure piece) {
 		button.setGraphic(new ImageView(piece.getImage()));
-		piece.setCoordinates(x, y);
-		button.setOnAction((event) -> {
-			moves(piece);
-		});
+		String id;
+		for (Figure figure: pieces.values()) {
+			if (figure.getCoordinates().getX() == x) {
+				if (figure.getCoordinates().getY() == y) {
+					id = figure.getId();
+					pieces.remove(id);
+					break;
+				}
+			}
+		}
 		
+
+		piece.setCoordinates(x, y);
+		clearField();
+		for (Figure figure: pieces.values()) {
+			setUpPiece(figure);
+		}
 	}
 	
 	
 	
 	private void removePiece(Button button) {
 		button.setGraphic(null);
+	}
+	
+	
+	
+	private void clearField() {
+		for (int i = 0; i < 8; i++) {
+			for (int j = 0; j < 8; j++) {
+				fields[i][j].setOnAction((event) -> {
+					
+				});
+			}
+		}
 	}
 	
 }
