@@ -173,28 +173,28 @@ public class UserInterface extends Application{
 			pieces.put("pawnB" + (i+1), pawnB);
 		}
 		
-		Figure leftBishopB = new Bishop(new Coordinate(0,2), "white", B_Bishop, "leftBishopB");
+		Figure leftBishopB = new Bishop(new Coordinate(0,2), "black", B_Bishop, "leftBishopB");
 		pieces.put("leftBishopB", leftBishopB);
 		
-		Figure rightBishopB = new Bishop(new Coordinate(0,5), "white", B_Bishop, "rightBishopB");
+		Figure rightBishopB = new Bishop(new Coordinate(0,5), "black", B_Bishop, "rightBishopB");
 		pieces.put("rightBishopB", rightBishopB);
 		
-		Figure leftRookB = new Rook(new Coordinate(0,0), "white", B_Rook, "leftRookB");
+		Figure leftRookB = new Rook(new Coordinate(0,0), "black", B_Rook, "leftRookB");
 		pieces.put("leftRookB", leftRookB);
 		
-		Figure rightRookB = new Rook(new Coordinate(0,7), "white", B_Rook, "rightRookB");
+		Figure rightRookB = new Rook(new Coordinate(0,7), "black", B_Rook, "rightRookB");
 		pieces.put("rightRookB", rightRookB);
 		
-		Figure leftKnightB = new Knight(new Coordinate(0,1), "white", B_Knight, "leftKnightB");
+		Figure leftKnightB = new Knight(new Coordinate(0,1), "black", B_Knight, "leftKnightB");
 		pieces.put("leftKnightB", leftKnightB);
 
-		Figure rightKnightB = new Knight(new Coordinate(0,6), "white", B_Knight, "rightKnightB");
+		Figure rightKnightB = new Knight(new Coordinate(0,6), "black", B_Knight, "rightKnightB");
 		pieces.put("rightKnightB", rightKnightB);
 		
-		Figure queenB = new Queen(new Coordinate(0,3), "white", B_Queen, "queenB");
+		Figure queenB = new Queen(new Coordinate(0,3), "black", B_Queen, "queenB");
 		pieces.put("queenB", queenB);
 		
-		Figure kingB = new King(new Coordinate(0,4), "white", B_King, "kingB");
+		Figure kingB = new King(new Coordinate(0,4), "black", B_King, "kingB");
 		pieces.put("kingB", kingB);
 		
 		for (Figure figure: pieces.values()) {
@@ -236,11 +236,25 @@ public class UserInterface extends Application{
 		});
 		
 		for(Coordinate c: move) {
+			boolean sameColor = false;
 			int xx = c.getX() + x;
 			int yy = c.getY() + y;
 			if (xx < 8 && xx > -1) {
 				if (yy < 8 && yy > -1) {
-					setMove(fields[xx][yy], x, y, xx, yy, piece, style);
+					
+					for (Figure figure: pieces.values()) {
+						if (figure.getCoordinates().getX() == xx) {
+							if (figure.getCoordinates().getY() == yy) {
+								if (figure.getColor().equals(piece.getColor())) {
+									sameColor = true;
+								}
+							}
+						}
+					}
+					
+					if (!sameColor) {
+						setMove(fields[xx][yy], x, y, xx, yy, piece, style);
+					}
 				}
 			}
 		}
