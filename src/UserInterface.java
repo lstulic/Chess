@@ -574,31 +574,31 @@ public class UserInterface extends Application{
 		if (color.equals("white")) {
 			switch(piece) {
 			case "bishop":
-				newFigure = new Bishop(new Coordinate(x, y), color, W_Bishop, "bishopW" + newId++);
+				newFigure = new Bishop(new Coordinate(x, y), color, W_Bishop, "BishopW" + newId++);
 				break;
 			case "rook":
-				newFigure = new Rook(new Coordinate(x, y), color, W_Rook, "rookW" + newId++);
+				newFigure = new Rook(new Coordinate(x, y), color, W_Rook, "RookW" + newId++);
 				break;
 			case "knight":
-				newFigure = new Knight(new Coordinate(x, y), color, W_Knight, "knightW" + newId++);
+				newFigure = new Knight(new Coordinate(x, y), color, W_Knight, "KnightW" + newId++);
 				break;
 			case "queen":
-				newFigure = new Queen(new Coordinate(x, y), color, W_Queen, "queenW" + newId++);
+				newFigure = new Queen(new Coordinate(x, y), color, W_Queen, "QueenW" + newId++);
 				break;
 			}
 		} else {
 			switch(piece) {
 			case "bishop":
-				newFigure = new Bishop(new Coordinate(x, y), color, B_Bishop, "bishopB" + newId++);
+				newFigure = new Bishop(new Coordinate(x, y), color, B_Bishop, "BishopB" + newId++);
 				break;
 			case "rook":
-				newFigure = new Rook(new Coordinate(x, y), color, B_Rook, "rookB" + newId++);
+				newFigure = new Rook(new Coordinate(x, y), color, B_Rook, "RookB" + newId++);
 				break;
 			case "knight":
-				newFigure = new Knight(new Coordinate(x, y), color, B_Knight, "knightB" + newId++);
+				newFigure = new Knight(new Coordinate(x, y), color, B_Knight, "KnightB" + newId++);
 				break;
 			case "queen":
-				newFigure = new Queen(new Coordinate(x, y), color, B_Queen, "queenB" + newId++);
+				newFigure = new Queen(new Coordinate(x, y), color, B_Queen, "QueenB" + newId++);
 				break;
 			}
 			
