@@ -247,6 +247,7 @@ public class UserInterface extends Application{
 			boolean sameColor = false;
 			boolean hasPiece = false;
 			boolean hadPiece = false;
+			boolean Piece = false;
 		
 		
 			for(Coordinate c: move) {
@@ -286,6 +287,7 @@ public class UserInterface extends Application{
 											sameColor = true;
 										} else {
 											hadPiece = true;
+											Piece = true;
 										}
 										if (figure.getId().contains("king")) {
 											sameColor = true;
@@ -298,7 +300,7 @@ public class UserInterface extends Application{
 						
 						if (!sameColor && !hasPiece) {
 							if (piece.getId().contains("pawn")) {
-								if (!hasPiece) {
+								if (!Piece) {
 									setMove(fields[xx][yy], x, y, xx, yy, piece, style);
 								}
 							} else if(hadPiece){
