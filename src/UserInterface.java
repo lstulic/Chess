@@ -29,11 +29,18 @@ public class UserInterface extends Application{
 	public String B_Queen = "file:images/black_queen.png";
 	
 	
+	
+	
 	//declaring board and fields
 	static GridPane board;
 	static Button[][] fields;
-	HashMap<String, Figure> pieces = new HashMap<>();
+	static HashMap<String, Figure> pieces = new HashMap<>();
 	public boolean firstMove = true;
+	public String picked;
+	public int newId = 1;
+	
+	
+	
 	
 	
 	public void start(Stage stage) {
@@ -239,6 +246,7 @@ public class UserInterface extends Application{
 			boolean knight = piece.getId().contains("Knight");
 			boolean sameColor = false;
 			boolean hasPiece = false;
+			boolean hadPiece = false;
 		
 		
 			for(Coordinate c: move) {
@@ -251,7 +259,7 @@ public class UserInterface extends Application{
 				if (xx < 8 && xx > -1) {
 					if (yy < 8 && yy > -1) {
 						if (!knight) {
-							if (sameColor) {//collision
+							if (sameColor || hasPiece) {//collision
 								if ((cgetX == 0 && cgetY == 1) || 
 									(cgetX == 1 && cgetY == 0) || 
 									(cgetX == 0 && cgetY == -1) ||
@@ -261,10 +269,14 @@ public class UserInterface extends Application{
 									(cgetX == -1 && cgetY == 1) ||
 									(cgetX == 1 && cgetY == -1)) {
 									sameColor = false;
+									hadPiece = false;
+									hasPiece = false;
 								}
 							}
 						} else {
 							sameColor = false;
+							hadPiece = false;
+							hasPiece = false;
 						}
 						if(!sameColor) {
 							for (Figure figure: pieces.values()) {
@@ -273,7 +285,7 @@ public class UserInterface extends Application{
 										if (figure.getColor().equals(piece.getColor())) {
 											sameColor = true;
 										} else {
-											hasPiece = true;
+											hadPiece = true;
 										}
 										if (figure.getId().contains("king")) {
 											sameColor = true;
@@ -284,15 +296,19 @@ public class UserInterface extends Application{
 							}
 						}
 						
-						if (!sameColor) {
+						if (!sameColor && !hasPiece) {
 							if (piece.getId().contains("pawn")) {
 								if (!hasPiece) {
 									setMove(fields[xx][yy], x, y, xx, yy, piece, style);
 								}
+							} else if(hadPiece){
+								setMove(fields[xx][yy], x, y, xx, yy, piece, style);
+								hasPiece = true;
 							} else {
 								setMove(fields[xx][yy], x, y, xx, yy, piece, style);
 							}
 						}
+						
 					}
 				}
 			}
@@ -385,6 +401,7 @@ public class UserInterface extends Application{
 					pieceP.Move();
 				});
 			}
+			
 		} else if(piece.getId().contains("pawnB")) {
 			Pawn pieceP = (Pawn) piece;
 			if (!pieceP.Moved()) {
@@ -407,6 +424,7 @@ public class UserInterface extends Application{
 					fields[x][y].setStyle(style);
 				});
 			}
+			
 		}else {
 			fields[xx][yy].setOnAction((event) -> {
 				movePiece(fields[xx][yy], xx, yy, piece);
@@ -414,6 +432,8 @@ public class UserInterface extends Application{
 				fields[x][y].setStyle(style);
 			});
 		}
+		
+		
 	}
 	
 	
@@ -430,12 +450,16 @@ public class UserInterface extends Application{
 				}
 			}
 		}
-		
 
 		piece.setCoordinates(x, y);
+		
 		clearField();
 		for (Figure figure: pieces.values()) {
 			setUpPiece(figure);
+		}
+		
+		if (piece.getId().contains("pawn")) {
+			checkPawnLocation(piece);
 		}
 	}
 	
@@ -457,4 +481,146 @@ public class UserInterface extends Application{
 		}
 	}
 	
+	
+	
+	private void checkPawnLocation(Figure piece) {
+		String id = "";
+		if (piece.getCoordinates().getX() == 0) {
+			id = piece.getId();
+			Stage stage2 = new Stage();
+			PickPawn(stage2, piece.getColor(),  piece);
+		}
+		
+		if (piece.getCoordinates().getX() == 7) {
+			id = piece.getId();
+			Stage stage2 = new Stage();
+			PickPawn(stage2, piece.getColor(),  piece);
+		}
+	}
+	
+	
+	
+	private void PickPawn(Stage stage2, String color, Figure piece) {
+		HBox hb = new HBox();
+		Button bishop = new Button();
+		Button rook = new Button();
+		Button knight = new Button();
+		Button queen = new Button();
+		
+		
+		
+		
+		bishop.setPrefSize(120, 120);
+		rook.setPrefSize(120, 120);
+		knight.setPrefSize(120, 120);
+		queen.setPrefSize(120, 120);
+		
+		bishop.setStyle("-fx-background-color: beige;");
+		rook.setStyle("-fx-background-color: darkslategrey;");
+		knight.setStyle("-fx-background-color: beige;");
+		queen.setStyle("-fx-background-color: darkslategrey;");
+		
+		
+		if (color.equals("white")) {
+			bishop.setGraphic(new ImageView(W_Bishop));
+			rook.setGraphic(new ImageView(W_Rook));
+			knight.setGraphic(new ImageView(W_Knight));
+			queen.setGraphic(new ImageView(W_Queen));
+		} else if (color.equals("black")) {
+			bishop.setGraphic(new ImageView(B_Bishop));
+			rook.setGraphic(new ImageView(B_Rook));
+			knight.setGraphic(new ImageView(B_Knight));
+			queen.setGraphic(new ImageView(B_Queen));
+		}
+		
+		
+		bishop.setOnAction((event) -> {
+			System.out.println("bishop");
+			setNewPiece(color, piece.getCoordinates().getX(), piece.getCoordinates().getY(), piece.getId(), "bishop");
+			stage2.close();
+		});
+		
+		rook.setOnAction((event) -> {
+			System.out.println("rook");
+			setNewPiece(color, piece.getCoordinates().getX(), piece.getCoordinates().getY(), piece.getId(), "rook");
+			stage2.close();
+		});
+		
+		knight.setOnAction((event) -> {
+			System.out.println("knight");
+			setNewPiece(color, piece.getCoordinates().getX(), piece.getCoordinates().getY(), piece.getId(), "knight");
+			stage2.close();
+		});
+		
+		queen.setOnAction((event) -> {
+			System.out.println("queen");
+			setNewPiece(color, piece.getCoordinates().getX(), piece.getCoordinates().getY(), piece.getId(), "queen");
+			stage2.close();
+		});
+		
+		
+		
+		hb.getChildren().addAll(bishop, rook, knight, queen);
+		
+		Scene scene = new Scene(hb);
+		stage2.setScene(scene);
+		stage2.show();
+	}
+	
+	private void setNewPiece(String color, int x, int y, String id, String piece) {
+		Figure newFigure = new Pawn(new Coordinate(x, y), color, W_Pawn, id);
+		if (color.equals("white")) {
+			switch(piece) {
+			case "bishop":
+				newFigure = new Bishop(new Coordinate(x, y), color, W_Bishop, "bishopW" + newId++);
+				break;
+			case "rook":
+				newFigure = new Rook(new Coordinate(x, y), color, W_Rook, "rookW" + newId++);
+				break;
+			case "knight":
+				newFigure = new Knight(new Coordinate(x, y), color, W_Knight, "knightW" + newId++);
+				break;
+			case "queen":
+				newFigure = new Queen(new Coordinate(x, y), color, W_Queen, "queenW" + newId++);
+				break;
+			}
+		} else {
+			switch(piece) {
+			case "bishop":
+				newFigure = new Bishop(new Coordinate(x, y), color, B_Bishop, "bishopB" + newId++);
+				break;
+			case "rook":
+				newFigure = new Rook(new Coordinate(x, y), color, B_Rook, "rookB" + newId++);
+				break;
+			case "knight":
+				newFigure = new Knight(new Coordinate(x, y), color, B_Knight, "knightB" + newId++);
+				break;
+			case "queen":
+				newFigure = new Queen(new Coordinate(x, y), color, B_Queen, "queenB" + newId++);
+				break;
+			}
+			
+		}
+		
+		pieces.remove(id);
+		pieces.put(newFigure.getId(), newFigure);
+		
+		clearField();
+		for (Figure figure: pieces.values()) {
+			setUpPiece(figure);
+		}
+	}
+	
 }
+
+
+
+
+
+
+
+
+
+
+
+
