@@ -1,6 +1,8 @@
 
 public class Rook extends Figure{
 
+	private boolean moved;
+	
 	public Rook(Coordinate cords, String color, String image, String id) {
 		super(cords, color, image, id);
 		addMoves();
@@ -23,5 +25,14 @@ public class Rook extends Figure{
 			setMove(-i,0);
 		}
 	}
+	
+	public boolean getMoved() {
+		return this.moved;
+	}
+	
+	public void setMoved() {
+		this.moved = true;
+	}
+
 
 }
