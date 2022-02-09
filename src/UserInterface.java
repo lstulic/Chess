@@ -318,7 +318,13 @@ public class UserInterface extends Application{
 			if (piece.getId().contains("pawn")) {
 				pawnMoves(piece, style);
 			}
-		
+			
+			if (piece.getId().contains("king")) {
+				King king = (King) piece;
+				if (!king.getMoved()) {
+					castling(piece, style);
+				}
+			}
 		
 		
 		
@@ -379,7 +385,7 @@ public class UserInterface extends Application{
 	
 	
 	
-	public void setMove(Button button, int x, int y, int xx, int yy, Figure piece, String style) {
+	private void setMove(Button button, int x, int y, int xx, int yy, Figure piece, String style) {
 		if (piece.getId().contains("pawnW")) {
 			Pawn pieceP = (Pawn) piece;
 			if (!pieceP.Moved()) {
@@ -432,6 +438,13 @@ public class UserInterface extends Application{
 				movePiece(fields[xx][yy], xx, yy, piece);
 				removePiece(fields[x][y]);
 				fields[x][y].setStyle(style);
+				if (piece.getId().contains("king")) {
+					King king = (King) piece;
+					king.setMoved();
+				} else if (piece.getId().contains("Rook")) {
+					Rook rook = (Rook) piece;
+					rook.setMoved();
+				}
 			});
 		}
 		
@@ -611,6 +624,113 @@ public class UserInterface extends Application{
 		for (Figure figure: pieces.values()) {
 			setUpPiece(figure);
 		}
+	}
+	
+	
+	
+	private void castling(Figure piece, String style) {
+		boolean hasPiece = false, hasRook = false;
+		int x = piece.getCoordinates().getX();
+		int y = piece.getCoordinates().getY();
+			
+		
+		for (Figure figure: pieces.values()) {
+			if (figure.getCoordinates().getX() == x && figure.getCoordinates().getY() == 5) {
+				hasPiece = true;
+				break;
+			} else if (figure.getCoordinates().getX() == x && figure.getCoordinates().getY() == 6) {
+				hasPiece = true;
+				break;
+			}
+			
+			if (figure.getCoordinates().getX() == x && figure.getCoordinates().getY() == 7) {
+				if (figure.getId().contains("Rook")) {
+					Rook rook = (Rook) figure;
+					if (!rook.getMoved())
+					{
+						hasRook = true;
+					}
+				}
+			}
+		}
+			
+		if (!hasPiece && hasRook) {
+			fields[x][6].setOnAction((event) -> {
+				movePiece(fields[x][6], x, 6, piece);
+				removePiece(fields[x][y]);
+				fields[x][y].setStyle(style);
+				if (piece.getColor().equals("white")) {
+					movePiece(fields[x][5], x, 5, pieces.get("rightRookW"));
+					removePiece(fields[x][7]);
+					fields[x][7].setStyle(fields[x][7].getStyle());
+					Rook rook = (Rook) pieces.get("rightRookW");
+					rook.setMoved();
+				} else {
+					movePiece(fields[x][5], x, 5, pieces.get("rightRookB"));
+					removePiece(fields[x][7]);
+					fields[x][7].setStyle(fields[x][7].getStyle());
+					Rook rook = (Rook) pieces.get("rightRookB");
+					rook.setMoved();
+				}
+				King king = (King) piece;
+				king.setMoved();
+			});
+		}
+		
+		hasPiece = false;
+		hasRook = false;
+		
+		
+		
+		for (Figure figure: pieces.values()) {
+			if (figure.getCoordinates().getX() == x && figure.getCoordinates().getY() == 3) {
+				hasPiece = true;
+				break;
+			} else if (figure.getCoordinates().getX() == x && figure.getCoordinates().getY() == 2) {
+				hasPiece = true;
+				break;
+			} else if (figure.getCoordinates().getX() == x && figure.getCoordinates().getY() == 1) {
+				hasPiece = true;
+				break;
+			}
+			
+			if (figure.getCoordinates().getX() == x && figure.getCoordinates().getY() == 0) {
+				if (figure.getId().contains("Rook")) {
+					Rook rook = (Rook) figure;
+					if (!rook.getMoved())
+					{
+						hasRook = true;
+					}
+				}
+			}
+		}
+			
+		if (!hasPiece && hasRook) {
+			fields[x][2].setOnAction((event) -> {
+				movePiece(fields[x][2], x, 2, piece);
+				removePiece(fields[x][y]);
+				fields[x][y].setStyle(style);
+				if (piece.getColor().equals("white")) {
+					movePiece(fields[x][3], x, 3, pieces.get("leftRookW"));
+					removePiece(fields[x][0]);
+					fields[x][0].setStyle(fields[x][0].getStyle());
+					Rook rook = (Rook) pieces.get("leftRookW");
+					rook.setMoved();
+				} else {
+					movePiece(fields[x][3], x, 3, pieces.get("leftRookB"));
+					removePiece(fields[x][0]);
+					fields[x][0].setStyle(fields[x][0].getStyle());
+					Rook rook = (Rook) pieces.get("leftRookB");
+					rook.setMoved();
+				}
+				King king = (King) piece;
+				king.setMoved();
+			});
+			return;
+		}
+			
+			
+			
 	}
 	
 }
